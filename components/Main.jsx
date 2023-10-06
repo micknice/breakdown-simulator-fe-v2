@@ -27,6 +27,8 @@ function MapboxMap2() {
   const [selectedPatrol, setSelectedPatrol] = useState(null)
   const [selectedJob, setSelectedJob] = useState(null)
 
+  
+
   const handlePatrolClick = (patrol) => {
     console.log('handlePatrolClick invoked', patrol)
     setFocusView('patrols')
@@ -105,6 +107,10 @@ function MapboxMap2() {
  
       setMarkers(markerArr);
       setPatData(patrolArr);
+      if(selectedPatrol) {
+      const thisPatrol = patData.find(patrol => patrol.patrolId === selectedPatrol.patrolId)
+      setSelectedPatrol(thisPatrol)
+      }
     }
   };
 
@@ -209,33 +215,7 @@ function MapboxMap2() {
           mapStyle="mapbox://styles/mapbox/streets-v9"
           mapboxAccessToken={MAPBOX_TOKEN}
           >
-          {/* paints route path of selected patrol to assigned job */}
-          {focusView === 'patrols' && selectedPatrol && selectedPatrol.onJob &&
-          selectedPatrol.routePath.map((marker, index) => {
-            if((index + 1) % 3 !== 0 ) {
-              const latitude  = marker[0];
-              const longitude  = marker[1];
-            return (
-              <Marker key={index} latitude={latitude} longitude={longitude} >
-                <div className='hover:scale-110 ' >
-                  <div>
-                    <svg
-                      height="15"
-                      viewBox="0 0 24 24"
-                      style={{
-                        cursor: 'pointer',
-                        fill: 'red',
-                        stroke: 'dotted',
-                        transform: `translate(${0 / 2}px,${0}px)`,
-                      }}
-                      >
-                      <circle cx="12" cy="12" r="3" T/>
-                    </svg>                    
-                  </div> 
-                </div>            
-              </Marker>
-            );
-          }})}
+          
           {markers.map((marker, index) => {
             const { color, latitude, longitude } = marker;
             console.log(color)
@@ -310,6 +290,40 @@ ls                      viewBox="0 0 24 24"
               </Marker>
             );
           })}
+          {/* paints route path of selected patrol to assigned job */}
+          {focusView === 'patrols' && selectedPatrol && selectedPatrol.onJob &&
+          selectedPatrol.routePath.map((marker, index) => {
+            if((index + 1) % 3 !== 0 ) {
+              const thisPatrol = patData.find(patrol => patrol.patrolId === selectedPatrol.patrolId)
+              const traveled = index <= thisPatrol.currentRouteIndex;
+              const color = traveled ? 'green' : 'red';
+              const latitude  = marker[0];
+              const longitude  = marker[1];
+            if (!thisPatrol.onJob && selectedPatrol && selectedPatrol.patrolId === thisPatrol.patrolId) {
+              return []
+            }
+            return (
+              <Marker key={index} latitude={latitude} longitude={longitude} >
+
+                  <div className='hover:scale-110 z-0' >
+                  <div>
+                    <svg
+                      height="15"
+                      viewBox="0 0 24 24"
+                      style={{
+                        cursor: 'pointer',
+                        fill: color,
+                        stroke: 'dotted',
+                        transform: `translate(${0 / 2}px,${0}px)`,
+                      }}
+                      >
+                      <circle cx="12" cy="12" r="3" T/>
+                    </svg>                    
+                  </div> 
+                </div>            
+              </Marker>
+            );
+          }})}
         </ReactMapGL>
         {simStarted && simLoading &&
         <div className='absolute top-0 -left-14 w-full h-full z-10 bg-transparent pointer-events-none flex justify-center items-center'>
