@@ -378,19 +378,44 @@ ls                      viewBox="0 0 24 24"
         }
         {selectedJob && focusView === 'jobs' &&
             <div className='flex flex-col'>
-              <p >Job ID: {selectedJob.jobId}</p>
-              <p>Member ID: {selectedJob.memberId}</p>
-              <p>Address: {selectedJob.address}</p>
-              <p>Postcode: {selectedJob.postCode}</p>
-              <p>Job logged time: {selectedJob.logTime}</p>
-              <p>Patrol assigned time: {selectedJob.assignmentTime}</p>
-              {selectedJob.patrolAssigned && 
-              <p>Assigned patrol: {selectedJob.patrolId}</p>
-              }
-              {!selectedJob.patrolAssigned && 
-              <p>Assigned patrol: Queued</p>
-              }
-              
+              <div className='py-2'>
+                <p className='text-lg'>Job ID:</p>
+                <p>{selectedJob.jobId}</p>
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Member ID:</p>
+                <p>{selectedJob.memberId}</p>
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Address:</p>
+                <p>{selectedJob.address}</p>
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Postcode:</p>
+                <p>{selectedJob.postCode}</p>
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Job logged time:</p>
+                <p>{selectedJob.logTime}</p>
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Patrol assigned time:</p>
+                {selectedJob.patrolAssigned &&
+                <p>{selectedJob.assignmentTime}</p>
+                }
+                {!selectedJob.patrolAssigned &&
+                <p>{selectedJob.assignmentTime}</p>
+                }
+              </div>
+              <div className='py-2'>
+                <p className='text-lg'>Assigned patrol: </p>
+                {selectedJob.patrolAssigned && 
+                <p>{selectedJob.patrolId}</p>
+                }
+                {!selectedJob.patrolAssigned && 
+                <p>Queued</p>
+                }
+              </div>
             </div>
         }
 
